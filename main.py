@@ -1,6 +1,7 @@
-import pandas as pd 
+import pandas as pd
+import plotly
 
-code_df = pd.read_html('http://kind.krx.co.kr/corpgeneral/corpList.do?method=loadInitPage#', header=1)[0] 
+code_df = pd.read_html('http://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13', header=0)[0] 
 
 # 종목코드가 6자리이기 때문에 6자리를 맞춰주기 위해 설정해줌 
 code_df.종목코드 = code_df.종목코드.map('{:06d}'.format)
@@ -16,7 +17,7 @@ code_df.head()
 # 네이버 금융(http://finance.naver.com)에 넣어줌
 def get_url(item_name, code_df): 
     code = code_df.query("name=='{}'".format(item_name))['code'].to_string(index=False)
-    url = 'http://finance.naver.com/item/sise_day.nhn?code={code}'.format(code=code)
+    url = 'http://finance.naver.com/item/sise_day.nhn?code={code}'.format(code=code.lstrip())
     
     print("요청 URL = {}".format(url)) 
     return url
