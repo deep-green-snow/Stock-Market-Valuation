@@ -13,6 +13,7 @@ class Sorting:
     # Finding underestimated stock by indexes in the FS
     def algorithm(self):
         bCheckROE = True
+        bCheckBPS = True
         bCheckEPS = True
         bCheckPER = True
         bCheckPBR = True
@@ -21,6 +22,7 @@ class Sorting:
         bCheckDR = True
         bCheckRR = True
         nEmptyROEcnT = 0
+        nEmptyBPScnT = 0
         nEmptyEPScnT = 0
         nEmptyPERcnT = 0
         nEmptyPBRcnT = 0 
@@ -32,6 +34,7 @@ class Sorting:
         for col in range(self.__nDataCnt):
             ROE = self.__sorting_df.loc['ROE'][col].replace(',', '')
             EPS = self.__sorting_df.loc['EPS'][col].replace(',', '')
+            BPS = self.__sorting_df.loc['BPS'][col].replace(',', '')
             PER = self.__sorting_df.loc['PER'][col].replace(',', '')
             PBR = self.__sorting_df.loc['PBR'][col].replace(',', '')
             ROP = self.__sorting_df.loc['ROP'][col].replace(',', '')
@@ -45,11 +48,20 @@ class Sorting:
                     bCheckROE = False
             else: nEmptyROEcnT += 1 
                 
-            # PER : 15이하
+            #적정주가 1 : EPS * ROE(100)
+            if(BPS != "" and BPS != "-"):
+                # EPS(주당 순이익) : EPS*ROE = 적정주가
+                if(ROE != "" and ROE != "-"):
+                    mEPS = float(BPS)*float(ROE)/100 
+                    if(float(mEPS) * float(ROE) < 0.95*self.__current_price):
+                        bCheckBPS = False
+            else: nEmptyBPScnT += 1
+
+            # PER : 15이하 #EPS 개정(EPS = BPS * ROE)
             if(PER != "" and PER != "-"):
                 if(float(PER) > 15):
                     bCheckPER = False
-                # EPS(주당 순이익) : EPS*PER = 적정주가 
+                #  # 적정주가 2, EPS(주당 순이익) : EPS*PER = 적정주가 
                 if(EPS != "" and EPS != "-"):
                     if(float(EPS) * float(PER) < 0.95*self.__current_price):
                         bCheckEPS = False
@@ -92,6 +104,7 @@ class Sorting:
 
             # If empty table, do not append on the underestimated stock list
         if(nEmptyROEcnT >= self.__nDataCnt): bCheckROE = False
+        if(nEmptyBPScnT >= self.__nDataCnt): bCheckBPS = False
         if(nEmptyEPScnT >= self.__nDataCnt): bCheckEPS = False
         if(nEmptyPERcnT >= self.__nDataCnt): bCheckPER = False
         if(nEmptyPBRcnT >= self.__nDataCnt): bCheckPBR = False

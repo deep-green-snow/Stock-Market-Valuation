@@ -38,7 +38,7 @@ for idx in code_df.index:
 
     # Get Financial Statement of the company I selected above by code
     fs = FinancialStatement.FinancialStatement(company_code)
-    fs_df = fs.getFS('annual')
+    fs_df = fs.getFS('quarter') # annual or quarter
 
     # Get current stock price of the company I selected above by code
     csp = CurrentStockPrice.CurrentStockPrice(company_code)
@@ -60,7 +60,7 @@ for idx in code_df.index:
     sorting = Sorting.Sorting(fs_df, current_price)
     check_list = sorting.algorithm()  
 
-    # 7~8 : Gold, 5~6 : Silver, 3~4 : Bronze
+    # 8 : Diamond 7 : Gold, 6 : Silver, 4~5 : Bronze
     if(check_list.count(True) >= 8): underEstimated_Diamond.append(code_df.iloc[idx]['name'])
     elif(check_list.count(True) >= 7): underEstimated_Gold.append(code_df.iloc[idx]['name'])
     elif(check_list.count(True) >= 6): underEstimated_Silver.append(code_df.iloc[idx]['name'])

@@ -63,10 +63,11 @@ class FinancialStatement:
             
         # 필요한 것
         # ROE PER PBR
-        finance = finance.loc[['ROE(지배주주)', 'EPS(원)', 'PER(배)', 'PBR(배)', '영업이익률', '순이익률', '부채비율', '유보율']]
-        finance.rename(index = {'ROE(지배주주)' : 'ROE', 'EPS(원)' : 'EPS', 'PER(배)' : 'PER', 'PBR(배)' : 'PBR', '영업이익률' : 'ROP', '순이익률' : 'NPM', '부채비율' : 'DR', '유보율' : 'RR' }, inplace = True)
-        # 저평가 기준
+        finance = finance.loc[['ROE(지배주주)', 'BPS(원)' ,'EPS(원)', 'PER(배)', 'PBR(배)', '영업이익률', '순이익률', '부채비율', '유보율']]
+        finance.rename(index = {'ROE(지배주주)' : 'ROE', 'BPS(원)' : 'BPS', 'EPS(원)' : 'EPS', 'PER(배)' : 'PER', 'PBR(배)' : 'PBR', '영업이익률' : 'ROP', '순이익률' : 'NPM', '부채비율' : 'DR', '유보율' : 'RR' }, inplace = True)
+        ### 저평가 기준 ###
         # ROE(자기자본이익률) : 15 ~ 30%
+        # BPS(Bookvalue per share) : BPS*ROE = EPS, EPS*ROE(100) = 적정주가
         # EPS(주당 순이익) : EPS*PER = 적정주가 
         # PER : 15이하
         # PBR(주가순자산비율) : 1.5 이하
